@@ -1,5 +1,0 @@
-main:
-	debugger: "dbg-gdb"
-	path: "main"
-	args: ["-f 2 -n berlin -o 2 -g 2 -a 1"]
-	cwd: "Algs"
