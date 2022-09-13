@@ -12,7 +12,7 @@
 #include <Utilities/timer.h>
 #include "Structs/tspNetwork.h"
 #include "Readers/GTFS2Reader.h"
-#include "Algs/OptALTDijkstraPointer.h"
+#include "Algs/TRIPLA.h"
 
 
 typedef struct NodeInfo Foo;
@@ -251,7 +251,7 @@ void runQueriesFromFile( TspNetwork<GraphType>& net, int algorithm, std::string&
       exit(-1);
     }
 
-    OptALTDijkstraPointer<TspNetwork> alg3( net, &algTimestamp, basePath + filename);
+    TRIPLA<TspNetwork> alg3( net, &algTimestamp, basePath + filename);
     float mysum = 0;
     float sum = 0;
     float max = 0;
@@ -302,7 +302,7 @@ void runRandomQueries( TspNetwork<GraphType>& net, int algorithm, std::string& b
     typedef TimeEvent_<NodeIterator>  TimeEvent;
 
 
-            OptALTDijkstraPointer<TspNetwork> alg( net, &algTimestamp, basePath + filename);
+            TRIPLA<TspNetwork> alg( net, &algTimestamp, basePath + filename);
 
             StationID dep, arr;
             Time time_ = 0;

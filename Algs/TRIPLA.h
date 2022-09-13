@@ -21,7 +21,7 @@
 #define TIMEPERIOD 86400
 
 template <typename TspNetwork>
-class OptALTDijkstraPointer
+class TRIPLA
 {
 
 public:
@@ -42,7 +42,7 @@ public:
   typedef typename TspNetwork::Route                            Route;
   typedef TimeEvent_<NodeIterator>  TimeEvent;
 
-  OptALTDijkstraPointer(TspNetwork& tspNetwork, TTL *timestamp, std::string filename): tspNet(tspNetwork), stations(tspNet.stations), G(tspNet.G),  m_timestamp(timestamp), pq(8556000, 0)
+  TRIPLA(TspNetwork& tspNetwork, TTL *timestamp, std::string filename): tspNet(tspNetwork), stations(tspNet.stations), G(tspNet.G),  m_timestamp(timestamp), pq(8556000, 0)
   {
     ReadHeuristics(filename);
     pq.reserve( stations.size());
