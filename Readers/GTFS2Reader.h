@@ -23,7 +23,7 @@
 #define DIA 1
 #define TIMEPERIOD 86400
 #define SECONDS 60
-#define DAYS 7
+//#define DAYS 7
 
 
 template <typename TspNetwork, typename InTspNetwork>
@@ -105,112 +105,24 @@ struct TestDay
 
 
   GTFS2Reader( TspNetwork& tspNetwork, InTspNetwork& intspNetwork, const std::string& routesFilename, const std::string& tripsFilename, const std::string& stopFilename,
-    const std::string& stopTimesFilename, const std::string& transfersFilename, const std::string& SDaysFilename, const std::string& footpathsFilename, const std::string& cdfilename, bool walk, std::string netname) :
+    const std::string& stopTimesFilename, const std::string& transfersFilename, const std::string& SDaysFilename, const std::string& footpathsFilename, const std::string& cdfilename, bool walk, std::string netname, int ndays) :
     TDBuilder<TspNetwork, InTspNetwork>( tspNetwork, intspNetwork),
     m_routesFilename( routesFilename), m_tripsFilename( tripsFilename),
-    m_stopsFilename(stopFilename), m_stopTimesFilename( stopTimesFilename), m_transfersFilename( transfersFilename),  m_calendarFilename(SDaysFilename), m_footpaths(footpathsFilename), m_calendarDatesFilename(cdfilename), walkEnabled(walk), netName(netname)
+    m_stopsFilename(stopFilename), m_stopTimesFilename( stopTimesFilename), m_transfersFilename( transfersFilename),  m_calendarFilename(SDaysFilename), m_footpaths(footpathsFilename), m_calendarDatesFilename(cdfilename), walkEnabled(walk), netName(netname), numberOfDays(ndays)
     {
-
       std::cout << "Walk file: " << m_footpaths << std::endl;
 
-      if(netName == "Paris")
-      {
-        netCalendar = Calendar(2018, 3, 26, 2018, 3, 28, 0);
-        netCalendar.workingDays[0] = 1;
-        netCalendar.workingDays[1] = 1;
-        netCalendar.workingDays[2] = 1;
-        netCalendar.workingDays[3] = 1;
-        netCalendar.workingDays[4] = 1;
-        netCalendar.workingDays[5] = 1;
-        netCalendar.workingDays[6] = 1;
+      if(netName == "Paris") netCalendar = Calendar(2018, 3, 26, 2018, 3, 28, 0);
+      else if(netName == "Rome") netCalendar = Calendar(2020, 11, 2, 2020, 11, 8, 0);
+      else if(netName == "Berlin") netCalendar = Calendar(2020, 11, 2, 2020, 11, 8, 0);
+      else if(netName == "London") netCalendar = Calendar(2015, 11, 2, 2015, 11, 8, 0);
+      else if(netName == "Athens") netCalendar = Calendar(2017, 2, 6, 2017, 2, 12, 0);
+      else if(netName == "Switzerland") netCalendar = Calendar(2017, 5, 29, 2017, 6, 4, 0);
 
+      for(int i = 0; i < numberOfDays; ++i) netCalendar.workingDays[i] = 1;
 
-
-        netCalendar.firstDayofTheWeek = 0;
-        netCalendar.setBinDays();
-
-       }
-       else if(netName == "Rome")
-       {
-         netCalendar = Calendar(2020, 11, 2, 2020, 11, 8, 0);
-         netCalendar.workingDays[0] = 1;
-         netCalendar.workingDays[1] = 1;
-           netCalendar.workingDays[2] = 1;
-           netCalendar.workingDays[3] = 1;
-           netCalendar.workingDays[4] = 1;
-           netCalendar.workingDays[5] = 1;
-           netCalendar.workingDays[6] = 1;
-
-
-         netCalendar.firstDayofTheWeek = 0;
-         netCalendar.setBinDays();
-
-       }
-       else if(netName == "Berlin")
-       {
-         netCalendar = Calendar(2020, 11, 2, 2020, 11, 8, 0);
-         netCalendar.workingDays[0] = 1;
-         netCalendar.workingDays[1] = 1;
-         netCalendar.workingDays[2] = 1;
-           netCalendar.workingDays[3] = 1;
-           netCalendar.workingDays[4] = 1;
-           netCalendar.workingDays[5] = 1;
-           netCalendar.workingDays[6] = 1;
-
-         netCalendar.firstDayofTheWeek = 0;
-         netCalendar.setBinDays();
-       }
-       else if(netName == "London")
-       {
-         netCalendar = Calendar(2015, 11, 2, 2015, 11, 8, 0);
-         netCalendar.workingDays[0] = 1;
-         netCalendar.workingDays[1] = 1;
-         netCalendar.workingDays[2] = 1;
-         netCalendar.workingDays[3] = 1;
-         netCalendar.workingDays[4] = 1;
-         netCalendar.workingDays[5] = 1;
-         netCalendar.workingDays[6] = 1;
-
-         netCalendar.firstDayofTheWeek = 0;
-         netCalendar.setBinDays();
-
-       }
-       else if(netName == "Athens")
-       {
-         netCalendar = Calendar(2017, 2, 6, 2017, 2, 12, 0);
-         netCalendar.workingDays[0] = 1;
-         netCalendar.workingDays[1] = 1;
-         netCalendar.workingDays[2] = 1;
-         netCalendar.workingDays[3] = 1;
-         netCalendar.workingDays[4] = 1;
-         netCalendar.workingDays[5] = 1;
-         netCalendar.workingDays[6] = 1;
-
-         netCalendar.firstDayofTheWeek = 0;
-         netCalendar.setBinDays();
-
-       }
-       else if(netName == "Switzerland")
-       {
-         netCalendar = Calendar(2017, 5, 29, 2017, 6, 4, 0);
-         netCalendar.workingDays[0] = 1;
-         netCalendar.workingDays[1] = 1;
-         netCalendar.workingDays[2] = 1;
-         netCalendar.workingDays[3] = 1;
-         netCalendar.workingDays[4] = 1;
-         netCalendar.workingDays[5] = 1;
-         netCalendar.workingDays[6] = 1;
-
-         netCalendar.firstDayofTheWeek = 0;
-         netCalendar.setBinDays();
-
-
-       }
-
-
-
-
-
+      netCalendar.firstDayofTheWeek = 0;
+      netCalendar.setBinDays();
 
     }
 
@@ -269,6 +181,7 @@ struct TestDay
       std::string m_calendarFilename;
       std::map<std::string,Time> tranedges;
       std::string netName;
+      int numberOfDays;
 
       int NullId = -1;
 
@@ -1140,7 +1053,7 @@ struct TestDay
 
         TimeEvent tEv;
         tEv.depTime = depTime;
-        tEv.length = (arrTime - depTime); // Κυκλική διαφορά πρέπει!!!!
+    //    tEv.length = (arrTime - depTime); // Κυκλική διαφορά πρέπει!!!!
         tEv.sDays = binDays;
         tEv.sDays = tEv.sDays & netCalendar.binDays;
         tEv.arrTime = arrTime;
@@ -1560,7 +1473,7 @@ line.erase(remove(line.begin(), line.end(), '"'), line.end());
           Calendar& cal = intspNet.calendar[trip.calendarId];
 
           Calendar cal2 = cal;
-          int days=DAYS-1;
+          int days=numberOfDays-1;
           if(conn.depTime >= 86400)
           {
             if(cal.workingDays[days] == 1)

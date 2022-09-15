@@ -83,7 +83,7 @@ public:
 
 
     // Μηδενισμός του χρόνου μετεπιβίβασης του σταθμού αφετηρίας
-    depSt->IterDist = INF;
+    depSt->IterDist = NO_INDEX;
 
     // Αρχικοποίηση της απόστασης του σταθμού αναχώρισης
     depSt->dist = depTime;
@@ -95,7 +95,8 @@ public:
     pq.insert( depTime, depSt);
 
 
-    int inf = INF;
+    const int inf = INF;
+    const Index no_index = NO_INDEX;
 
 
 
@@ -136,7 +137,7 @@ public:
         NodeIterator v = G.target(e);
         Distance kk = u->dist+e->walk;
 
-       UpdateDistanceWithQueue(u, v, kk, inf);
+       UpdateDistanceWithQueue(u, v, kk, no_index);
 
       }
 
@@ -169,7 +170,7 @@ public:
 
 
     switch (u->IterDist) {
-      case INF:
+      case NO_INDEX:
               {
                 Time tempPair(u->getDistance()-pureDay-1);
               // Δυαδική αναζήτηση για τον υπολογισμό της επόμενης αναχώρισης
@@ -214,7 +215,7 @@ public:
       if(eI->label == 'w' && minDist > u->dist + eI->walk)
       {
         minDist = u->dist + eI->walk;
-        indexDist  = INF;
+        indexDist  = NO_INDEX;
         lowerWeight = minDist;
       }
 
@@ -307,7 +308,7 @@ public:
 
 
 
-inline void  UpdateDistanceWithQueue(const NodeIterator& u, NodeIterator& v, const Distance& newdist, const int& indexDist) noexcept
+inline void  UpdateDistanceWithQueue(const NodeIterator& u, NodeIterator& v, const Distance& newdist, const Index& indexDist) noexcept
 {
 
   if(v->timestamp != *(m_timestamp))
@@ -476,7 +477,7 @@ inline bool relaxDiscoveredEventChain(TimeEvent*& eventPointer,  const NodeItera
   if(eventPointer->validDeparture <= u->getDistance()+u->minTransferTime)
   {
     Distance op = eventPointer->validDeparture-eventPointer->validDeparture%TIMEPERIOD + eventPointer->depTime;
-    tempDist = op + eventPointer->length;
+    tempDist = op + eventPointer->getLength();
 
     if(tempDist < u->dist) tempDist+=86400;
 
@@ -521,7 +522,7 @@ inline void relaxDiscoveredEvent(TimeEvent*& eventPointer, const NodeIterator &u
   if(eventPointer->validDeparture <= DistTran)
   {
      Distance op = eventPointer->validDeparture-eventPointer->validDeparture%TIMEPERIOD + eventPointer->depTime;
-     Distance tempDist = op + eventPointer->length;
+     Distance tempDist = op + eventPointer->getLength();
 
      if(tempDist < u->dist) tempDist+=86400;
 

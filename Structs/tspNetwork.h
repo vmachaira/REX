@@ -20,76 +20,68 @@ template<class T>
 struct TimeEvent_
 {
 
-  TimeEvent_():timestamp(0), nextIndex(INF), sDays(0), next(nullptr), prev(nullptr)
+  TimeEvent_():timestamp(0), nextIndex(NO_INDEX), sDays(0), next(nullptr)
   {
 
   }
+  TimeEvent_ *next; //8
+  T dest; // 8
+  Time depTime; //4
+  Time arrTime;//4
+  Distance validDeparture; // 4
+  TripID trId; // 4
+  TTL timestamp; // 2
+  Index nextIndex; // 2
+  unsigned char sDays; // 1
 
-   Time depTime;
-   Time arrTime;
-   TimeEvent_ *next;
-   TTL timestamp;
+  int getLength() const
+  {
+   return (arrTime-depTime);
+  }
 
-   Distance validDeparture;
-   Time length;
-   int nextIndex;
-   TripID trId;
+  bool isDiscovered(const TTL *current)
+  {
+    return (timestamp == *current);
+  }
 
-   T dest;
-   T origin;
-   TimeEvent_ *prev;
-   short int sDays;
+  void setDepartureTime( const Time departureTime)
+  {
+      depTime = departureTime;
+  }
 
-    bool isDiscovered(const TTL *current)
-    {
-      return (timestamp == *current);
-    }
+  Time getDepartureTime() const
+  {
+      return depTime;
+  }
 
+  Time getArrivalTime() const
+  {
+      return arrTime;
+  }
 
-    void setDepartureTime( const Time departureTime)
-    {
-        depTime = departureTime;
-    }
+  bool operator < (const TimeEvent_& t2) const
+  {
+     return (depTime < t2.depTime );
+  }
 
-    Time getDepartureTime() const
-    {
-        return depTime;
-    }
-
-    Time getArrivalTime() const
-    {
-        return arrTime;
-    }
-
-
-
-   bool operator < (const TimeEvent_& t2) const
-   {
-       return (depTime < t2.depTime );
-   }
-
-   bool operator == (const TimeEvent_& t1) const
-   {
-       return((depTime == t1.depTime) && (length == t1.length) && (sDays == t1.sDays)) ;
-   }
+  bool operator == (const TimeEvent_& t1) const
+  {
+    return((depTime == t1.depTime) && (getLength() == t1.getLength()) && (sDays == t1.sDays)) ;
+  }
 
 
    TimeEvent_& operator = ( const TimeEvent_& t1)
    {
      depTime = t1.depTime;
      arrTime = t1.arrTime;
-     length = t1.length;
      trId = t1.trId;
      next = t1.next;
-     prev = t1.prev;
      timestamp = t1.timestamp;
      nextIndex = t1.nextIndex;
      sDays = t1.sDays;
      validDeparture = t1.validDeparture;
      dest = t1.dest;
-     origin = t1.origin;
      return *this;
-
    }
 
 
@@ -101,9 +93,9 @@ struct TimesContainer
      numItems(0)
      {}
 
-     int numItems;
+     Index numItems;
 
-     int size() const
+     Index size() const
      {
        return numItems;
      }
@@ -135,7 +127,7 @@ struct TimesContainer
        return index[i];
      }
 
-     struct Index
+     struct Index_
      {
        Time& operator[]( const int i)
        {
@@ -158,7 +150,7 @@ struct TimeEventContainer
      numItems(0)
      {}
 
-     int numItems;
+     Index numItems;
 
      int size() const
      {
@@ -181,7 +173,7 @@ struct TimeEventContainer
        return index[i];
      }
 
-     struct Index
+     struct Index_
      {
        TimeEvent_<T>*& operator[]( const int i)
        {
@@ -307,18 +299,13 @@ struct TspNode{
 
 TspNode():stId(0), first(nullptr), second(nullptr){}
 
-void* pred = 0;
-
-Distance dist = INF;
-
-TTL timestamp = 0;
-int IterDist = INF;
-
-Time minTransferTime;
-unsigned int ptr;
-
-StationID stId;
-TTL Permant = 0;
+void* pred = 0; // 8
+Distance dist = INF; // 4
+TTL timestamp = 0; // 2
+Index IterDist = NO_INDEX; // 2
+unsigned short int minTransferTime; //2
+StationID stId; // 2
+TTL Permant = 0; // 2
 
 
 union
@@ -362,7 +349,6 @@ TspNode& operator = ( const TspNode& t)
    dist = t.dist;
    pred = t.pred;
    timestamp = t.timestamp;
-   ptr = t.ptr;
    stId = t.stId;
    Permant = t.Permant;
    first = t.first;

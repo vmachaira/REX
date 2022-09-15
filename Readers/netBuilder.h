@@ -237,7 +237,6 @@ class TDBuilder
     {
       et.depTime = ev.depTime;
       et.arrTime = ev.arrTime;
-      et.length = ev.length;
       et.trId = ev.trId;
       et.sDays = ev.sDays;
 
@@ -680,9 +679,9 @@ class TDBuilder
                 }
 
                 //minLength
-                auto obj = *std::min_element(events.begin(), events.end(), [](const TimeEvent& t1, const TimeEvent& t2){return(t1.length<t2.length);});
+                auto obj = *std::min_element(events.begin(), events.end(), [](const TimeEvent& t1, const TimeEvent& t2){return(t1.getLength()<t2.getLength());});
 
-                netEdges.push_back(EdgeData(stations[uid].stNode, stations[vid].stNode, obj.length, events, uid/*idToVector[uid])*/));
+                netEdges.push_back(EdgeData(stations[uid].stNode, stations[vid].stNode, obj.getLength(), events, uid/*idToVector[uid])*/));
 
                 numConnections+=events.size();
 
@@ -755,13 +754,11 @@ class TDBuilder
 
                NodeIterator temp = G.target(mye);
                (mye->TimeTable[i]).dest = temp;
-               (mye->TimeTable[i]).origin = u;
 
 
                tNodeIterator ttemp = Gt.target(eP);
                tTimeEvent tempevent;
                tempevent.dest = ttemp;
-               tempevent.origin = uP;
 
 
                CopyEvent(mye->TimeTable[i], tempevent);
@@ -958,7 +955,6 @@ class TDBuilder
                             if(eNext->TimeTable[j].depTime == exampletime && eNext->TimeTable[j].sDays == mydays)//if(e->TimeTable[i].arrTime%1440 <= eNext->TimeTable[j].depTime)
                             {
                               eP->TimeTable[i].next = &(eNext->TimeTable[j]);
-                              (eNext->TimeTable[j]).prev = &(eP->TimeTable[i]);
                               break;
                             }
 
