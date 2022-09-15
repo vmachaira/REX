@@ -186,7 +186,7 @@ void shell( int& format, int& mod, int& algorithm, std::string& basePath, std::s
 
     GTFS2Reader<TspNetwork, InTspNetwork> data( net, InNet, basePath + "routes.txt", basePath + "trips.txt",
                                            basePath + "stops.txt", basePath + "stop_times.txt", basePath + "transfers.txt", basePath + "calendar.txt",
-                                           basePath + "walkPaths_d"+std::to_string(numberOfDays)+"_s4_5_r"+std::to_string(walkDuration)+"_min.txt", basePath + "calendar_dates.txt", walkEnabled, netName);
+                                           basePath + "walkPaths_d"+std::to_string(numberOfDays)+"_s4_5_r"+std::to_string(walkDuration)+"_min.txt", basePath + "calendar_dates.txt", walkEnabled, netName, numberOfDays);
         data.read();
 
     // Graph Memory
